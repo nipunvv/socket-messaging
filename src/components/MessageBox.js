@@ -1,6 +1,33 @@
-import { Box, Button, InputBase, TextField, Typography } from "@mui/material";
+import { Box, Button, InputBase } from "@mui/material";
+import { useEffect, useState } from "react";
 
-export default function MessageBox() {
+export default function MessageBox({ socket }) {
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    socket.on("chat_message", (message) => {
+      console.log("Received message :", message);
+    });
+  }, [socket]);
+
+  const sendChatMessage = () => {
+    if (!socket) {
+      console.log("SOCKET IS NOT CONNECTED");
+      return;
+    }
+    socket.emit("chat_message", message);
+    setMessage('');
+  };
+
   return (
     <Box
       sx={{
@@ -20,8 +47,14 @@ export default function MessageBox() {
             borderRadius: "1rem",
             px: "1rem",
           }}
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
         />
-        <Button variant="contained" sx={{ mr: "1rem" }}>
+        <Button
+          variant="contained"
+          sx={{ mr: "1rem" }}
+          onClick={sendChatMessage}
+        >
           Send
         </Button>
       </Box>
