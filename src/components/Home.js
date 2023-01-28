@@ -1,7 +1,10 @@
+import Box from '@mui/material/Box';
+import Header from './Header';
+
 export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <Box>
+      <Header />
+    </Box>
   );
 }
