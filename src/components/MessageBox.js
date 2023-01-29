@@ -31,7 +31,7 @@ export default function MessageBox({ socket }) {
   return (
     <Box
       sx={{
-        position: "absolute",
+        position: "fixed",
         bottom: "0%",
         backgroundColor: "#efefef",
         width: "100vw",

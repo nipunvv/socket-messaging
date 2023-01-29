@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "./Header";
 import MessageBox from "./MessageBox";
 import io from "socket.io-client";
+import MessageList from "./MessageList";
 
 export default function Home() {
   const [socket, setSocket] = useState(null);
@@ -14,8 +15,9 @@ export default function Home() {
   }, [setSocket]);
 
   return (
-    <Box>
+    <Box sx={{height: '100%'}}>
       <Header />
+      <MessageList />
       <MessageBox socket={socket} />
     </Box>
   );

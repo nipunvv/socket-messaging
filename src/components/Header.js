@@ -9,6 +9,7 @@ export default function Header() {
         color: "white",
         width: "100%",
         display: "flex",
+        position: 'fixed',
       }}
     >
       <Box
