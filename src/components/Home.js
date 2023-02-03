@@ -7,6 +7,7 @@ import MessageList from "./MessageList";
 
 export default function Home() {
   const [socket, setSocket] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const newSocket = io(`http://localhost:3010`);
@@ -14,11 +15,41 @@ export default function Home() {
     return () => newSocket.close();
   }, [setSocket]);
 
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    socket.on("chat_message", (message) => {
+      setMessages((prevMessages) => {
+        const newMessages = [...prevMessages];
+        newMessages.push(message);
+        return newMessages;
+      });
+    });
+  }, [socket]);
+
+  const sendChatMessage = (message) => {
+    if (!socket) {
+      console.log("SOCKET IS NOT CONNECTED");
+      return;
+    }
+    socket.emit("chat_message", message);
+    const newMessages = [...messages];
+    newMessages.push(message);
+    setMessages(newMessages);
+  };
+
   return (
-    <Box sx={{height: '100%'}}>
+    <Box sx={{ height: "100%" }}>
       <Header />
-      <MessageList />
-      <MessageBox socket={socket} />
+      <MessageList messages={messages} />
+      <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
     </Box>
   );
 }
