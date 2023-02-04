@@ -11,6 +11,16 @@ const ApiUtils = {
         console.error(err);
       });
   },
+  get: async (url) => {
+    return await axios
+      .get(url)
+      .then((response) => {
+        return response;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
 };
 
 export default ApiUtils;

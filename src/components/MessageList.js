@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export default function MessageList() {
+export default function MessageList({ messages }) {
   return (
     <Box
       sx={{
@@ -11,7 +11,10 @@ export default function MessageList() {
         padding: "4rem 1rem",
       }}
     >
-      <Box>Message List</Box>
+      {messages.map((message) => {
+        console.log('MESSAGE: ', message);
+        return <Box>{message}</Box>;
+      })}
     </Box>
   );
 }
