@@ -4,10 +4,15 @@ import Header from "./Header";
 import MessageBox from "./MessageBox";
 import io from "socket.io-client";
 import MessageList from "./MessageList";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
+  const navigate = useNavigate();
+
+  const accessToken = localStorage.getItem("access_token");
+  if (!accessToken) navigate("/login");
 
   useEffect(() => {
     const newSocket = io(`http://localhost:3010`);
