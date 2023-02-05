@@ -56,19 +56,26 @@ export default function Home() {
     });
   }, [socket]);
 
-  // useEffect(async () => {
-  //   const url = `${BASE_URL}/api/me`;
-  //   const response = await ApiUtils.get(url);
-  //   if (response?.status === 200) {
-  //     setUser(response?.data);
-  //   }
-  // }, []);
+  useEffect(() => {
+    async function fetchUserDetails() {
+      const url = `${BASE_URL}/api/me`;
+      const response = await ApiUtils.get(url);
+      if (response?.status === 200) {
+        setUser(response?.data);
+      }
+    }
+    fetchUserDetails();
+  }, []);
 
-  const sendChatMessage = (message) => {
+  const sendChatMessage = (messageText) => {
     if (!socket) {
       console.log("SOCKET IS NOT CONNECTED");
       return;
     }
+    const message = {
+      from: user?.id,
+      message: messageText,
+    };
     socket.emit("chat_message", message);
     const newMessages = [...messages];
     newMessages.push(message);
@@ -78,7 +85,7 @@ export default function Home() {
   return (
     <Box sx={{ height: "100%" }}>
       <Header />
-      <MessageList messages={messages} />
+      <MessageList messages={messages} user={user} />
       <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
     </Box>
   );

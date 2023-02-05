@@ -12,8 +12,9 @@ const ApiUtils = {
       });
   },
   get: async (url) => {
+    const accessToken = localStorage.getItem("access_token");
     return await axios
-      .get(url)
+      .get(url, { headers: { "x-access-token": accessToken } })
       .then((response) => {
         return response;
       })
