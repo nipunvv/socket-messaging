@@ -9,7 +9,8 @@ export default function MessageList({ messages, user }) {
         WebkitBoxSizing: "border-box",
         MozBoxSizing: "border-box",
         boxSizing: "border-box",
-        height: "100%",
+        minHeight: "100%",
+        height: "fit-content",
         padding: "4rem 1rem",
       }}
     >
