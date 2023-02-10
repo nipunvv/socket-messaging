@@ -14,7 +14,7 @@ export default function Home() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
-  const [chatUsers, setChatUsers] = useState([]);
+  const [conversations, setConversations] = useState([]);
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -68,6 +68,7 @@ export default function Home() {
       }
     }
     fetchUserDetails();
+    setConversations([{ id: 1, user_name: "Nipun VV" }]);
   }, []);
 
   const sendChatMessage = (messageText) => {
@@ -95,7 +96,7 @@ export default function Home() {
           height: "100%",
         }}
       >
-        <ChatList />
+        <ChatList conversations={conversations} />
         <MessageList messages={messages} user={user} />
       </Box>
       <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
