@@ -7,11 +7,14 @@ import MessageList from "./MessageList";
 import { useNavigate } from "react-router-dom";
 import ApiUtils from "../utils/ApiUitils";
 import { BASE_URL } from "../constants";
+import { Typography } from "@mui/material";
+import ChatList from "./ChatList";
 
 export default function Home() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
+  const [chatUsers, setChatUsers] = useState([]);
   const navigate = useNavigate();
 
   const accessToken = localStorage.getItem("access_token");
@@ -85,7 +88,16 @@ export default function Home() {
   return (
     <Box sx={{ height: "100%" }}>
       <Header />
-      <MessageList messages={messages} user={user} />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          height: "100%",
+        }}
+      >
+        <ChatList />
+        <MessageList messages={messages} user={user} />
+      </Box>
       <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
     </Box>
   );
