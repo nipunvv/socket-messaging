@@ -7,13 +7,13 @@ import MessageList from "./MessageList";
 import { useNavigate } from "react-router-dom";
 import ApiUtils from "../utils/ApiUitils";
 import { BASE_URL } from "../constants";
-import { Typography } from "@mui/material";
 import ChatList from "./ChatList";
 
 export default function Home() {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
+  const [users, setUsers] = useState([]);
   const [conversations, setConversations] = useState([]);
   const navigate = useNavigate();
 
@@ -68,7 +68,17 @@ export default function Home() {
       }
     }
     fetchUserDetails();
-    setConversations([{ id: 1, user_name: "Nipun VV" }]);
+
+    async function fetchAllUsers() {
+      const url = `${BASE_URL}/api/users`;
+      const response = await ApiUtils.get(url);
+      if (response?.status === 200) {
+        setUsers(response?.data);
+      }
+    }
+    fetchAllUsers();
+
+    setConversations([{ id: 1, from: 1001, to: 1002, username: "Nipun VV" }]);
   }, []);
 
   const sendChatMessage = (messageText) => {
@@ -86,6 +96,21 @@ export default function Home() {
     setMessages(newMessages);
   };
 
+  const addNewChatToConversationList = (userDetails) => {
+    const updatedConversations = [...conversations];
+    if (!isConversationExists(userDetails.to)) {
+      updatedConversations.push(userDetails);
+      setConversations(updatedConversations);
+    }
+  };
+
+  const isConversationExists = (userId) => {
+    return (
+      conversations.findIndex((conversation) => conversation.to === userId) !==
+      -1
+    );
+  };
+
   return (
     <Box sx={{ height: "100%" }}>
       <Header />
@@ -96,7 +121,12 @@ export default function Home() {
           height: "100%",
         }}
       >
-        <ChatList conversations={conversations} />
+        <ChatList
+          conversations={conversations}
+          users={users}
+          updateConversations={addNewChatToConversationList}
+          currentUser={user}
+        />
         <MessageList messages={messages} user={user} />
       </Box>
       <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
