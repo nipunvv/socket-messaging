@@ -78,7 +78,14 @@ export default function Home() {
     }
     fetchAllUsers();
 
-    setConversations([{ id: 1, from: 1001, to: 1002, username: "Nipun VV" }]);
+    async function fetchAllConversations() {
+      const url = `${BASE_URL}/api/conversations`;
+      const response = await ApiUtils.get(url);
+      if (response?.status === 200) {
+        setConversations(response?.data);
+      }
+    }
+    fetchAllConversations();
   }, []);
 
   const sendChatMessage = (messageText) => {
@@ -96,18 +103,28 @@ export default function Home() {
     setMessages(newMessages);
   };
 
-  const addNewChatToConversationList = (userDetails) => {
-    const updatedConversations = [...conversations];
-    if (!isConversationExists(userDetails.to)) {
-      updatedConversations.push(userDetails);
-      setConversations(updatedConversations);
+  const addNewChatToConversationList = async (conversationDetails) => {
+    const url = `${BASE_URL}/api/conversations`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: { to: conversationDetails.to.id },
+      headers: { "x-access-token": accessToken },
+    });
+    if (response?.status === 201) {
+      conversationDetails.__id = response?.data?.id;
+      const updatedConversations = [...conversations];
+      if (!isConversationExists(conversationDetails.__id)) {
+        updatedConversations.push(conversationDetails);
+        setConversations(updatedConversations);
+      }
     }
   };
 
-  const isConversationExists = (userId) => {
+  const isConversationExists = (conversationId) => {
     return (
-      conversations.findIndex((conversation) => conversation.to === userId) !==
-      -1
+      conversations.findIndex(
+        (conversation) => conversation.__id === conversationId
+      ) !== -1
     );
   };
 

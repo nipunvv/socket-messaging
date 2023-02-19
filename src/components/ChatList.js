@@ -25,8 +25,8 @@ export default function ChatList({
 
   const handleClose = () => setOpen(false);
 
-  const addNewChat = (userDetails) => {
-    updateConversations(userDetails);
+  const addNewChat = (conversationData) => {
+    updateConversations(conversationData);
     handleClose();
   }
 
@@ -69,7 +69,7 @@ export default function ChatList({
               sx={{ padding: "1rem 0.5rem", margin: "0.5rem" }}
               elevation={1}
             >
-              <Typography>{conversation.username}</Typography>
+              <Typography>{conversation.to.name}</Typography>
             </Card>
           </Box>
         );
@@ -91,9 +91,9 @@ export default function ChatList({
           </Typography>
           {users.map((user, index) => {
             const bgColor = index % 2 == 0 ? "#E7E9EB" : "white";
-            const userData = {
-              from: currentUser.id,
-              to: user.id,
+            const conversationData = {
+              from: currentUser,
+              to: user,
               username: user.username,
             };
             return (
@@ -105,7 +105,7 @@ export default function ChatList({
                   borderBottom: "1px solid lightgrey",
                   cursor: "pointer",
                 }}
-                onClick={() => addNewChat(userData)}
+                onClick={() => addNewChat(conversationData)}
               >
                 {user.username}
               </Box>
