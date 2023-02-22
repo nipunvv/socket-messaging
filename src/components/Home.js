@@ -144,9 +144,11 @@ export default function Home() {
           updateConversations={addNewChatToConversationList}
           currentUser={user}
         />
-        <MessageList messages={messages} user={user} />
+        <Box sx={{width: "80%"}}>
+          <MessageList messages={messages} user={user} />
+          <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
+        </Box>
       </Box>
-      <MessageBox socket={socket} sendChatMessage={sendChatMessage} />
     </Box>
   );
 }

@@ -15,7 +15,7 @@ export default function MessageBox({ sendChatMessage }) {
         position: "fixed",
         bottom: "0%",
         backgroundColor: "#efefef",
-        width: "100vw",
+        width: "80%",
         py: "1rem",
       }}
     >

@@ -11,7 +11,7 @@ export default function MessageList({ messages, user }) {
         boxSizing: "border-box",
         minHeight: "100%",
         height: "fit-content",
-        width: "80%",
+        width: "100%",
         padding: "4rem 1rem",
       }}
     >
